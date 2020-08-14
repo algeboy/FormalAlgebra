@@ -58,3 +58,16 @@ natsSplit : (n:Nat) -> (m:Nat) -> SplitNatProof n
 natsSplit Z m = Above 0 m (MkAtLeast m 0 m Refl)
 natsSplit (S k) Z = Below (S k) Z (MkLTProof 0  (S k) k Refl)
 natsSplit (S k) (S j) = let x = natsSplit k j in (monotoneSplit x)
+
+|||-----------------------------------------------------------------------------
+||| Now the isomorphisms, what actually do things.
+
+split : (n:Nat) -> Nat -> DPair Nat (\k=>SplitNatProof n)
+split n m = (m**(natsSplit n m))
+
+join : (n:Nat) -> DPair Nat (\k=>SplitNatProof k) -> Nat
+join n (m**e) = m
+
+--------------------------------------------------------------------------------
+--- TODO: prove these are isomorphisms
+--- I.e. join n split n m = m and split n join n x = x
